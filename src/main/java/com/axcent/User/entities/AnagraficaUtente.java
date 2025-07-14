@@ -26,6 +26,7 @@ public class AnagraficaUtente
     private Date dob;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Mansione mansione;
 
 
