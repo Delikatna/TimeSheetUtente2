@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()     // accesso libero per login/registrazione
                         .requestMatchers("/api/public/**").permitAll()   // risorse pubbliche accessibili a tutti
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN") // accesso solo admin
-                        .requestMatchers("/api/hr/**").hasAuthority("HR")
+                        .requestMatchers("/api/hr/**").hasAuthority("HR") // accesso solo admin
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated());                         // qualsiasi altra richiesta → autenticazione obbligatoria
 
