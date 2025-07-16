@@ -8,6 +8,7 @@ import com.axcent.User.responses.AuthResponse;
 
 import com.axcent.User.security.JwtTokenProvider;
 import com.axcent.User.services.AnagraficaService;
+import com.axcent.User.services.AuthService;
 import com.axcent.User.services.UtenteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,43 +27,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController
 {
-    private final AuthenticationManager authenticationManager;
-    private final UtenteService utenteService;
-    private final AnagraficaService anagraficaService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthService authService;
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest loginRequest)
-    {
-        try{
-           Authentication authentication = authenticationManager.authenticate(
-                   new UsernamePasswordAuthenticationToken(
-                           loginRequest.getUsername(),
-                           loginRequest.getPassword()));
-
-           Long idUser = utenteService.findByUsername(loginRequest.getUsername()).getId();
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwt = jwtTokenProvider.generateToken(authentication);
-
-            String role = authentication.getAuthorities()
-                    .stream()
-                    .findFirst()
-                    .map(authority -> authority.getAuthority())
-                    .orElse("SCONOSCIUTO");
-
-            return ResponseEntity.ok(new AuthResponse(jwt, loginRequest.getUsername(), role, idUser));
-
+    public ResponseEntity<?> login(@RequestBody AuthRequest loginRequest) {
+        try {
+            AuthResponse response = authService.authenticateUser(loginRequest);
+            return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().body("error: "+e.getMessage());
+            return ResponseEntity.badRequest().body("error: " + e.getMessage());
         }
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?>logout(@RequestHeader("Authorization") String authHeader)
-    {
-        return ResponseEntity.ok(Map.of("message","Logout effetuato con successo"));
     }
 
 
