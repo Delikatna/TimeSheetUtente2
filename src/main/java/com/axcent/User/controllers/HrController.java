@@ -1,6 +1,8 @@
 package com.axcent.User.controllers;
 
+import com.axcent.User.dto.AnagraficaUtenteDto;
 import com.axcent.User.dto.RegistrazioneDto;
+import com.axcent.User.dto.UtenteDto;
 import com.axcent.User.entities.AnagraficaUtente;
 import com.axcent.User.entities.Utente;
 import com.axcent.User.services.AnagraficaService;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,5 +39,25 @@ public class HrController
     public AnagraficaUtente getUtenteById(@PathVariable() Long id)
     {
         return anagraficaService.findByIdUtente(id);
+    }
+
+    @PostMapping("/aggiorna/{id}")
+    public ResponseEntity<?> aggiornaAnagrafica
+            (
+                    @RequestBody AnagraficaUtente anagraficaUtente,
+                    @PathVariable Long id
+            )
+    {
+        return anagraficaService.modificaAnagrafica(anagraficaUtente, id);
+    }
+
+    @GetMapping("/tutte")
+    public List<UtenteDto> getTutteAnagrafiche()
+    {
+        List<UtenteDto> tutte = utenteService.getAllAnagraficaUtenti();
+        if (tutte.isEmpty())
+            throw new RuntimeException("Non ci sono utenti disponibili");
+
+        return tutte;
     }
 }
