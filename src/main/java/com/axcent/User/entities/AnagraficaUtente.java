@@ -20,7 +20,9 @@ public class AnagraficaUtente
     private Long id;
 
     @Column(nullable = false)
-    private String nome,cognome,sede,numTelefono;
+    private String nome,cognome,sede;
+    @Column(nullable = false, unique = true)
+    private String numTelefono;
 
     @Column(nullable = false)
     private Date dob;
