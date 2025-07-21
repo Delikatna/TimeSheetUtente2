@@ -1,34 +1,26 @@
 package com.axcent.User.controllers;
 
-import com.axcent.User.dto.RegistrazioneDto;
-import com.axcent.User.entities.AnagraficaUtente;
-import com.axcent.User.entities.Utente;
 import com.axcent.User.responses.AuthRequest;
 import com.axcent.User.responses.AuthResponse;
-
-import com.axcent.User.security.JwtTokenProvider;
-import com.axcent.User.services.AnagraficaService;
 import com.axcent.User.services.AuthService;
-import com.axcent.User.services.UtenteService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
-public class AuthController
-{
+public class AuthController {
     private final AuthService authService;
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest loginRequest) {
@@ -36,9 +28,10 @@ public class AuthController
             AuthResponse response = authService.authenticateUser(loginRequest);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().body("error: " + e.getMessage());
+            log.warn("Autenticazione fallita per utente {}", loginRequest.getUsername(), e);
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Credenziali non valide"));
         }
     }
-
-
 }

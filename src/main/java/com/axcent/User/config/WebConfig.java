@@ -19,13 +19,13 @@ public class WebConfig
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowCredentials(true); // Consenti credenziali (se necessario)
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200")); // Permetti l'accesso da localhost:4200
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Metodi consentiti
-        config.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Authorization")); // Headers esposti
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Authorization"));
 
-        source.registerCorsConfiguration("/**", config); // Applica questa configurazione a tutte le rotte
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }
