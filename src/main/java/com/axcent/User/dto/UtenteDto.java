@@ -18,6 +18,7 @@ public class UtenteDto
     private String username;
     private String nome;
     private String cognome;
+    private String email;
     private String sede;
     private String numTelefono;
     private Date dob;
@@ -29,6 +30,7 @@ public class UtenteDto
         this.username= ut.getUsername();
         this.nome = au.getNome();
         this.cognome = au.getCognome();
+        this.email = ut.getEmail();
         this.dob = au.getDob();
         this.sede = au.getSede();
         this.numTelefono = au.getNumTelefono();
